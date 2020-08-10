@@ -27,6 +27,8 @@
 #include <circle/sched/scheduler.h>
 #include <circle_stdlib_app.h>
 
+#include <iostream>
+#include <sstream>
 #include <vector>
 
 #include "lcd/clcd.h"
@@ -86,6 +88,10 @@ private:
 	bool mShouldReboot;
 	bool mLEDOn;
 	unsigned mLEDOnTime;
+
+	std::stringstream mMIDILogBuffer;
+	std::ofstream mMIDILogFile;
+	unsigned mMIDILogCount;
 
 	// Synthesizer
 	CMT32SynthBase* mSynth;

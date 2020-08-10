@@ -24,6 +24,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include <iomanip>
+
 #include <circle/usb/usbmidi.h>
 #include <circle/startup.h>
 
@@ -74,6 +76,8 @@ CKernel::CKernel(void)
 	  mShouldReboot(false),
 	  mLEDOn(false),
 	  mLEDOnTime(0),
+
+	  mMIDILogCount(0),
 
 	  mSynth(nullptr)
 {
@@ -174,6 +178,8 @@ bool CKernel::Initialize(void)
 	mLogger.Write(GetKernelName(), LogNotice, "mt32-pi " MT32_PI_VERSION);
 	mLogger.Write(GetKernelName(), LogNotice, "Compile time: " __DATE__ " " __TIME__);
 	CCPUThrottle::Get()->DumpStatus();
+
+	mMIDILogBuffer << std::setfill('0') << std::hex << std::uppercase;
 
 	return true;
 }
@@ -283,6 +289,17 @@ CStdlibApp::TShutdownMode CKernel::Run(void)
 				mLCD->Clear();
 
 			return ShutdownReboot;
+		}
+
+		if (mMIDILogCount > 20)
+		{
+			mMIDILogFile.open("midi-log.txt", std::ofstream::out | std::ofstream::app);
+			mMIDILogFile << mMIDILogBuffer.str().c_str();
+			mMIDILogFile.close();
+
+			mMIDILogBuffer.str(std::string());
+			mMIDILogBuffer << std::setfill('0') << std::hex << std::uppercase;
+			mMIDILogCount = 0;
 		}
 	}
 
@@ -429,6 +446,16 @@ void CKernel::MIDIPacketHandler(unsigned nCable, u8 *pPacket, unsigned nLength)
 		// Channel message
 		else
 			packet |= pPacket[i] << 8 * i;
+
+		// Log to file
+		pThis->mMIDILogBuffer << std::setw(2) << static_cast<int>(pPacket[i]);
+		if (i < nLength - 1)
+			pThis->mMIDILogBuffer << ' ';
+		else
+		{
+			pThis->mMIDILogBuffer << std::endl;
+			++(pThis->mMIDILogCount);
+		}
 	}
 
 	if (packet)
