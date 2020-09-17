@@ -40,6 +40,15 @@ CFG(height,					int,						m_nLCDHeight,				2										)
 CFG(i2c_lcd_address,		int,						m_nLCDI2CLCDAddress,		0x3c,							true	)
 END_SECTION
 
+BEGIN_SECTION(network)
+CFG(mode,					TNetworkMode,				mNetworkMode,				TNetworkMode::Off						)
+CFG(dhcp,					bool,						mNetworkDHCP,				true									)
+CFG(ip_address,				CIPAddress,					mNetworkIPAddress,			0xc0a80164								)
+CFG(subnet_mask,			CIPAddress,					mNetworkSubnetMask,			0xffffff00								)
+CFG(default_gateway,		CIPAddress,					mNetworkDefaultGateway,		0xc0a80101								)
+CFG(dns_server,				CIPAddress,					mNetworkDNSServer,			0xc0a80101								)
+END_SECTION
+
 #undef BEGIN_SECTION
 #undef CFG
 #undef END_SECTION

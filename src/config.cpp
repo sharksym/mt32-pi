@@ -60,6 +60,7 @@ CONFIG_ENUM_STRINGS(TMT32EmuResamplerQuality, ENUM_RESAMPLERQUALITY);
 CONFIG_ENUM_STRINGS(TMT32EmuMIDIChannels, ENUM_MIDICHANNELS);
 CONFIG_ENUM_STRINGS(TMT32EmuROMSet, ENUM_ROMSET);
 CONFIG_ENUM_STRINGS(TLCDType, ENUM_LCDTYPE);
+CONFIG_ENUM_STRINGS(TNetworkMode, ENUM_NETWORKMODE);
 
 CConfig* CConfig::s_pThis = nullptr;
 
@@ -134,6 +135,28 @@ bool CConfig::ParseOption(const char* pString, int* pOutInt, bool bHex)
 	return true;
 }
 
+bool CConfig::ParseOption(const char* pString, CIPAddress* pOut)
+{
+	// Space for 4 period-separated groups of 3 digits plus null terminator
+	char buffer[16];
+	u8 ipAddress[4];
+
+	strncpy(buffer, pString, sizeof(buffer));
+	char *token = strtok(buffer, ".");
+
+	for (uint8_t i = 0; i < 4; ++i)
+	{
+		if (!token)
+			return false;
+
+		ipAddress[i] = atoi(token);
+		token = strtok(nullptr, ".");
+	}
+
+	pOut->Set(ipAddress);
+	return true;
+}
+
 // Define template function wrappers for parsing enums
 CONFIG_ENUM_PARSER(TAudioOutputDevice);
 CONFIG_ENUM_PARSER(TAudioI2CDACInit);
@@ -141,3 +164,4 @@ CONFIG_ENUM_PARSER(TMT32EmuResamplerQuality);
 CONFIG_ENUM_PARSER(TMT32EmuMIDIChannels);
 CONFIG_ENUM_PARSER(TMT32EmuROMSet);
 CONFIG_ENUM_PARSER(TLCDType);
+CONFIG_ENUM_PARSER(TNetworkMode);

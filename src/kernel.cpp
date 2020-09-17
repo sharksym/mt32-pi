@@ -39,6 +39,9 @@
 #define LED_TIMEOUT_MILLIS 50
 #define ACTIVE_SENSE_TIMEOUT_MILLIS 330
 
+#define WLAN_FIRMWARE_PATH	"SD:/firmware/"
+#define WLAN_CONFIG_FILE	"SD:/wpa_supplicant.conf"
+
 CKernel* CKernel::s_pThis = nullptr;
 
 CKernel::CKernel(void)
@@ -55,6 +58,10 @@ CKernel::CKernel(void)
 	  m_USBHCI(&mInterrupt, &m_Timer),
 	  m_EMMC(&mInterrupt, &m_Timer, &mActLED),
 	  m_FileSystem{},
+
+	  m_WLAN(WLAN_FIRMWARE_PATH),
+	  m_Net(0, 0, 0, 0, "mt32-pi", NetDeviceTypeWLAN),
+	  m_WPASupplicant(WLAN_CONFIG_FILE),
 
 	  m_I2CMaster(1, true),
 	  m_pLCD(nullptr),

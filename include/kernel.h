@@ -21,11 +21,14 @@
 #ifndef _kernel_h
 #define _kernel_h
 
+#include <circle_stdlib_app.h>
 #include <circle/cputhrottle.h>
 #include <circle/i2cmaster.h>
 #include <circle/i2ssoundbasedevice.h>
+#include <circle/net/netsubsystem.h>
 #include <circle/sched/scheduler.h>
-#include <circle_stdlib_app.h>
+#include <wlan/bcm4343.h>
+#include <wlan/hostap/wpa_supplicant/wpasupplicant.h>
 
 #include "config.h"
 #include "lcd/mt32lcd.h"
@@ -53,6 +56,11 @@ protected:
 	CUSBHCIDevice m_USBHCI;
 	CEMMCDevice m_EMMC;
 	FATFS m_FileSystem;
+
+	// Network
+	CBcm4343Device m_WLAN;
+	CNetSubSystem m_Net;
+	CWPASupplicant m_WPASupplicant;
 
 	CI2CMaster m_I2CMaster;
 	CMT32LCD* m_pLCD;

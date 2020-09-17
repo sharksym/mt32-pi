@@ -38,13 +38,16 @@ CFLAGS		+=	-I "$(NEWLIBDIR)/include" \
 				-I .
 
 LIBS 		:=	$(CIRCLE_STDLIB_LIBS) \
-				$(CIRCLEHOME)/addon/SDCard/libsdcard.a \
-				$(CIRCLEHOME)/lib/usb/libusb.a \
-				$(CIRCLEHOME)/lib/input/libinput.a \
 				$(CIRCLEHOME)/addon/fatfs/libfatfs.a \
+				$(CIRCLEHOME)/addon/SDCard/libsdcard.a \
+				$(CIRCLEHOME)/addon/wlan/hostap/wpa_supplicant/libwpa_supplicant.a \
+				$(CIRCLEHOME)/addon/wlan/libwlan.a \
 				$(CIRCLEHOME)/lib/fs/libfs.a \
+				$(CIRCLEHOME)/lib/input/libinput.a \
+				$(CIRCLEHOME)/lib/libcircle.a \
+				$(CIRCLEHOME)/lib/net/libnet.a \
 				$(CIRCLEHOME)/lib/sched/libsched.a \
-				$(CIRCLEHOME)/lib/libcircle.a
+				$(CIRCLEHOME)/lib/usb/libusb.a
 
 ifeq ($(HDMI_CONSOLE), 1)
 DEFINE		+=	-D HDMI_CONSOLE

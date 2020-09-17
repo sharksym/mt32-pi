@@ -21,6 +21,9 @@
 #ifndef _config_h
 #define _config_h
 
+#include <circle/net/ipaddress.h>
+#include <circle/types.h>
+
 #include "mt32synth.h"
 #include "rommanager.h"
 #include "utility.h"
@@ -46,9 +49,15 @@ public:
 		ENUM(HD44780I2C, hd44780_i2c)      \
 		ENUM(SSD1306I2C, ssd1306_i2c)
 
+	#define ENUM_NETWORKMODE(ENUM) \
+		ENUM(Off, off)             \
+		ENUM(Ethernet, ethernet)   \
+		ENUM(WiFi, wifi)
+
 	CONFIG_ENUM(TAudioOutputDevice, ENUM_AUDIOOUTPUTDEVICE);
 	CONFIG_ENUM(TAudioI2CDACInit, ENUM_AUDIOI2CDACINIT);
 	CONFIG_ENUM(TLCDType, ENUM_LCDTYPE);
+	CONFIG_ENUM(TNetworkMode, ENUM_NETWORKMODE);
 
 	CConfig();
 	bool Initialize(const char* pPath);
@@ -65,12 +74,15 @@ private:
 	// Overloaded function to parse config options based on their types specified in the definition file
 	static bool ParseOption(const char* pString, bool* pOut);
 	static bool ParseOption(const char* pString, int* pOut, bool bHex = false);
+	static bool ParseOption(const char *pString, CIPAddress *pOut);
+
 	static bool ParseOption(const char* pString, TAudioOutputDevice* pOut);
 	static bool ParseOption(const char* pString, TAudioI2CDACInit* pOut);
 	static bool ParseOption(const char* pString, TMT32EmuResamplerQuality* pOut);
 	static bool ParseOption(const char* pString, TMT32EmuMIDIChannels* pOut);
 	static bool ParseOption(const char* pString, TMT32EmuROMSet* pOut);
 	static bool ParseOption(const char* pString, TLCDType* pOut);
+	static bool ParseOption(const char* pString, TNetworkMode* pOut);
 
 	static CConfig* s_pThis;
 };
